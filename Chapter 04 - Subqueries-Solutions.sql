@@ -1,14 +1,3 @@
-
----------------------------------------------------------------------
--- Microsoft SQL Server T-SQL Fundamentals
--- Chapter 02 - Single-Table Queries
--- © Itzik Ben-Gan 
----------------------------------------------------------------------
-
----------------------------------------------------------------------
--- Elements of the SELECT Statement
----------------------------------------------------------------------
-
 USE TSQLV4;
 
 SELECT orderid, orderdate, custid, empid
