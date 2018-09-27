@@ -11,28 +11,27 @@ FROM HR.Employees AS E
 WHERE N.n <= 5
 ORDER BY n, empid;
 
--- Write a query that returns a row for each employee and day in the range June 12, 2016  June 16 2016 --
--- Tables involved: TSQLV4 database, Employees and Nums tables --
-SELECT E.empid,
-	DATEADD(day, D.n - 1, CAST('20160612' AS DATE)) AS dt
-FROM HR.Employees AS E
-	CROSS JOIN dbo.Nums AS D
-WHERE D.n <= DATEDIFF(day, '20160612', '20160616') + 1
-ORDER BY empid, dt;
+use AdventureWorks2014
 
--- Return US customers, and for each customer the total number of orders and total quantities --
--- Tables involved: TSQLV4 database, Customers, Orders and OrderDetails tables --
-SELECT C.custid, C.companyname, O.orderid, O.orderdate
-FROM Sales.Customers AS C
-  INNER JOIN Sales.Orders AS O
-ON C.custid = O.custid;
+-- Write a query that collects business entity ID's of people and their passwords  --
+-- Tables involved: Person.person and Person.Password --
 
--- Return customers who placed no orders --
--- Tables involved: TSQLV4 database, Customers and Orders tables --
-SELECT C.custid, C.companyname, O.orderid, O.orderdate
-FROM Sales.Customers AS C
-	LEFT OUTER JOIN Sales.Orders AS O
-ON C.custid = O.custid;
+SELECT F.BusinessEntityID, P.BusinessEntityID
+FROM Person.person AS F
+	INNER JOIN Person.Password as P
+ON F.BusinessEntityID = P.BusinessEntityID;
+
+use AdventureWorksDW2014
+
+-- Select all from dbo.DimProduct --
+-- Tables involved: dbo.DimProduct --
+SELECT * FROM dbo.DimProduct;
+
+use WideWorldImportersDW
+
+-- Select all from Fact.movement --
+-- Tables involved: Fact.Movement --
+SELECT * FROM Fact.Movement;
 
 -- Return customers with orders placed on Feb 12, 2016 along with their orders --
 -- Tables involved: TSQLV4 database, Customers and Orders tables --
