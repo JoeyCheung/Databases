@@ -41,6 +41,9 @@ FROM Sales.Customers AS C
 		ON O.custid = C.custid
 WHERE O.orderid IS NULL;
 
+use WideWorldImporters
+SELECT * FROM Sales.Orders;
+
 -- Medium Queries -- 
 
 -- 4
