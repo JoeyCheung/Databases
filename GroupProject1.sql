@@ -202,23 +202,24 @@ ORDER BY totalqty ASC;
 
 -- Complicated Queries --
 
--- Write a query that matches customers with their orders including their order details audit --
--- Tables involved: Sales.Customers, Sales.Orders, Sales.OrderDetails, and Sales.OrderDetailsAudit -- 
-
-SELECT C.custid, C.companyname, O.orderid, OD.productid, OD.qty, ODA.orderid
-FROM Sales.Customers AS C
-	INNER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	LEFT OUTER JOIN Sales.OrderDetailsAudit as ODA
-		ON OD.orderid = ODA.orderid;
-
 -- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
 -- Tables involved: Customers and Order tables --
 
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
 SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
-FROM Sales.Customers AS C
+FROM dbo.GetCustOrders(0) AS C
 	INNER JOIN Sales.Orders AS O
 		ON O.custid = C.custid
 	INNER JOIN Sales.OrderDetails AS OD
@@ -227,107 +228,236 @@ FROM Sales.Customers AS C
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
 
--- Write a query that matches customers with their orders including their order details audit in ascending order of orderid --
--- Tables involved: Sales.Customers, Sales.Orders, Sales.OrderDetails, and Sales.OrderDetailsAudit -- 
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
 
-SELECT C.custid, C.companyname, O.orderid, OD.productid, OD.qty, ODA.orderid
-FROM Sales.Customers AS C
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(1) AS C
 	INNER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
+		ON O.custid = C.custid
 	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	LEFT OUTER JOIN Sales.OrderDetailsAudit as ODA
-		ON OD.orderid = ODA.orderid
-ORDER BY ODA.orderid ASC;
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
 
--- Write a query that matches customers with their orders including their order details audit in descending order of orderid --
--- Tables involved: Sales.Customers, Sales.Orders, Sales.OrderDetails, and Sales.OrderDetailsAudit -- 
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
 
-SELECT C.custid, C.companyname, O.orderid, OD.productid, OD.qty, ODA.orderid
-FROM Sales.Customers AS C
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(2) AS C
 	INNER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	LEFT OUTER JOIN Sales.OrderDetailsAudit as ODA
-		ON OD.orderid = ODA.orderid
-ORDER BY ODA.orderid DESC;
-
--- Write a query that's similar to the above query but preserves Orders, OrderDetails, and OrderDetailsAudit as an independent unit --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Customers AS C
-	LEFT OUTER JOIN
-		(Sales.Orders AS O
-			INNER JOIN Sales.OrderDetails AS OD
-				ON O.orderid = OD.orderid
-			LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
-				ON OD.orderid = ODA.orderid)
-		ON C.custid = O.custid;
-
--- Write a query that's similar to the above query but preserves Orders, OrderDetails, and OrderDetailsAudit as an independent unit in Ascending order by orderid--
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Customers AS C
-	LEFT OUTER JOIN
-		(Sales.Orders AS O
-			INNER JOIN Sales.OrderDetails AS OD
-				ON O.orderid = OD.orderid
-			LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
-				ON OD.orderid = ODA.orderid)
-		ON C.custid = O.custid
-ORDER BY O.orderid ASC;
-
--- Write a query that's similar to the above query but preserves Orders, OrderDetails, and OrderDetailsAudit as an independent unit in Descending order by orderid--
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Customers AS C
-	LEFT OUTER JOIN
-		(Sales.Orders AS O
-			INNER JOIN Sales.OrderDetails AS OD
-				ON O.orderid = OD.orderid
-			LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
-				ON OD.orderid = ODA.orderid)
-		ON C.custid = O.custid
-ORDER BY O.orderid DESC;
-
--- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails ordered by custid --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Orders AS O
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
-		ON OD.orderid = ODA.orderid
-	RIGHT OUTER JOIN Sales.Customers AS C
-		ON O.custid = C.custid;
-
--- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails ordered by custid in ascending order --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Orders AS O
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
-		ON OD.orderid = ODA.orderid
-	RIGHT OUTER JOIN Sales.Customers AS C
 		ON O.custid = C.custid
-ORDER BY C.custid ASC;
-
--- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails ordered by custid in descending order --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Orders AS O
 	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
+		ON OD.orderid = O.orderid
 	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
-		ON OD.orderid = ODA.orderid
-	RIGHT OUTER JOIN Sales.Customers AS C
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
+
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
+
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(3) AS C
+	INNER JOIN Sales.Orders AS O
 		ON O.custid = C.custid
-ORDER BY C.custid DESC;
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
+
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
+
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(4) AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
+
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
+
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(5) AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
+
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
+
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(6) AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
+
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
+
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(7) AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
+
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
+
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(8) AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
+
+-- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
+-- Tables involved: Customers and Order tables --
+
+use tsqlv4
+
+drop function if exists dbo.GetCustOrders;
+go
+create function dbo.GetCustOrders
+	(@cid AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT orderid, custid, empid, orderdate, requireddate, shipregion, shippostalcode, shipcountry
+	FROM Sales.Orders
+	WHERE custid = @cid
+GO
+
+SELECT C.custid, COUNT( DISTINCT ODA.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM dbo.GetCustOrders(9) AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
+		ON O.orderid = ODA.orderid
+GROUP BY C.custid;
