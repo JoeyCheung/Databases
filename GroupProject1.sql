@@ -141,18 +141,6 @@ FROM Sales.Customers AS C
 GROUP BY C.custid
 ORDER BY C.custid DESC;
 
--- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails ordered by custid --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Orders AS O
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	RIGHT OUTER JOIN Sales.Customers AS C
-		ON O.custid = C.custid
-GROUP BY C.custid
-ORDER BY C.custid;
-
 SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
 FROM Sales.Customers AS C
 	INNER JOIN Sales.Orders AS O
@@ -201,6 +189,16 @@ FROM Sales.Customers AS C
 	WHERE C.country = N'JPN'
 GROUP BY C.custid
 ORDER BY totalqty DESC;
+
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM Sales.Customers AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'JPN'
+GROUP BY C.custid
+ORDER BY totalqty ASC;
 
 -- Complicated Queries --
 
