@@ -182,17 +182,25 @@ FROM Sales.Customers AS C
 	WHERE C.country = N'USA'
 GROUP BY C.custid
 ORDER BY totalqty DESC;
--- Write a query that's similar to the above query but preserves Orders and OrderDetails as an independent unit in descending order by productid --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
 
-SELECT C.custid, O.orderid, OD.productid, OD.qty
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
 FROM Sales.Customers AS C
-	LEFT OUTER JOIN
-		(Sales.Orders AS O
-			INNER JOIN Sales.OrderDetails AS OD
-				ON O.orderid = OD.orderid)
-		ON C.custid = O.custid
-ORDER BY OD.productid DESC;
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'JPN'
+GROUP BY C.custid
+
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM Sales.Customers AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'JPN'
+GROUP BY C.custid
+ORDER BY totalqty DESC;
 
 -- Complicated Queries --
 
