@@ -33,14 +33,6 @@ use WideWorldImportersDW
 -- Tables involved: Fact.Movement --
 SELECT * FROM Fact.Movement;
 
--- Return customers with orders placed on Feb 12, 2016 along with their orders --
--- Tables involved: TSQLV4 database, Customers and Orders tables --
-SELECT C.custid, C.companyname
-FROM Sales.Customers AS C
-	LEFT OUTER JOIN Sales.Orders AS O
-		ON O.custid = C.custid
-WHERE O.orderid IS NULL;
-
 use WideWorldImporters
 SELECT * FROM Sales.Orders;
 
