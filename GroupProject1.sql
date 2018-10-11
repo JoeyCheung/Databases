@@ -81,75 +81,65 @@ FROM Sales.Customers AS C
 		WHERE C.country = N'JPN'
 GROUP BY C.custid;
 
--- Write a query that produces a sequence of integers in the range 1 through 1000 --
--- Tables involved: dbo.Digits --
-SELECT D3.digit * 100 + D2.digit * 10 + D1.digit + 1 AS n
-FROM dbo.Digits AS D1
-	CROSS JOIN dbo.Digits AS D2
-	CROSS JOIN dbo.Digits AS D3
-ORDER BY n;
-
--- Write a query that matches customers with their orders --
--- Tables involved: Sales.Customers --
-
-SELECT C.custid, C.companyname, O.orderid, OD.productid, OD.qty
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
 FROM Sales.Customers AS C
 	INNER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
+		ON O.custid = C.custid
 	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid;
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY numorders;
 
--- Write a query that has Sales.Customers and matches with Sales.Orders after that matches with Sales.OrderDetails
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
 FROM Sales.Customers AS C
-	LEFT OUTER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
 	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid;
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY numorders ASC
 
--- Write a query that's similar to the previous query but also includes customers wth no orders --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
 FROM Sales.Customers AS C
-	LEFT OUTER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
-	LEFT OUTER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid;
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY numorders DESC;
 
--- Write a query that's similar to the previous query but also includes customers wth no orders by orderid in ascending order --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
 FROM Sales.Customers AS C
-	LEFT OUTER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
-	LEFT OUTER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-ORDER BY O.orderid ASC;
-
--- Write a query that's similar to the previous query but also includes customers wth no orders in ascending order of custid --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Customers AS C
-	LEFT OUTER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
-	LEFT OUTER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
 ORDER BY C.custid;
 
--- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Orders AS O
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM Sales.Customers AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
 	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	RIGHT OUTER JOIN Sales.Customers AS C
-		ON O.custid = C.custid;
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY C.custid ASC;
+
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM Sales.Customers AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY C.custid DESC;
 
 -- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails ordered by custid --
 -- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
@@ -160,41 +150,38 @@ FROM Sales.Orders AS O
 		ON O.orderid = OD.orderid
 	RIGHT OUTER JOIN Sales.Customers AS C
 		ON O.custid = C.custid
+GROUP BY C.custid
 ORDER BY C.custid;
 
--- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails ordered by orderid in descending order --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Orders AS O
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	RIGHT OUTER JOIN Sales.Customers AS C
-		ON O.custid = C.custid
-ORDER BY O.orderid DESC;
-
--- Write a query that keeps Sales.Customers and joins with Sales.Order and Sales.OrderDetails ordered by productid in ascending order --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
-FROM Sales.Orders AS O
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid
-	RIGHT OUTER JOIN Sales.Customers AS C
-		ON O.custid = C.custid
-ORDER BY OD.productid ASC;
-
--- Write a query that's similar to the above query but preserves Orders and OrderDetails as an independent unit --
--- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
-
-SELECT C.custid, O.orderid, OD.productid, OD.qty
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
 FROM Sales.Customers AS C
-	LEFT OUTER JOIN
-		(Sales.Orders AS O
-			INNER JOIN Sales.OrderDetails AS OD
-				ON O.orderid = OD.orderid)
-		ON C.custid = O.custid;
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY totalqty;
 
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM Sales.Customers AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY totalqty ASC;
+
+SELECT C.custid, COUNT( DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
+FROM Sales.Customers AS C
+	INNER JOIN Sales.Orders AS O
+		ON O.custid = C.custid
+	INNER JOIN Sales.OrderDetails AS OD
+		ON OD.orderid = O.orderid
+	WHERE C.country = N'USA'
+GROUP BY C.custid
+ORDER BY totalqty DESC;
 -- Write a query that's similar to the above query but preserves Orders and OrderDetails as an independent unit in descending order by productid --
 -- Tables involved: Sales.Orders, Sales.Customers, and Sales.OrderDetails --
 
