@@ -194,11 +194,6 @@ ORDER BY totalqty ASC;
 
 -- Complicated Queries --
 
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
-
 drop function if exists dbo.GetCustOrders;
 go
 create function dbo.GetCustOrders
@@ -219,11 +214,6 @@ FROM dbo.GetCustOrders(0) AS C
 	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
-
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
 
 drop function if exists dbo.GetCustOrders;
 go
@@ -246,11 +236,6 @@ FROM dbo.GetCustOrders(1) AS C
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
 
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
-
 drop function if exists dbo.GetCustOrders;
 go
 create function dbo.GetCustOrders
@@ -271,11 +256,6 @@ FROM dbo.GetCustOrders(2) AS C
 	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
-
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
 
 drop function if exists dbo.GetCustOrders;
 go
@@ -298,9 +278,6 @@ FROM dbo.GetCustOrders(3) AS C
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
 
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
 drop function if exists dbo.GetCustOrders;
 go
 create function dbo.GetCustOrders
@@ -321,11 +298,6 @@ FROM dbo.GetCustOrders(4) AS C
 	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
-
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
 
 drop function if exists dbo.GetCustOrders;
 go
@@ -348,11 +320,6 @@ FROM dbo.GetCustOrders(5) AS C
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
 
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
-
 drop function if exists dbo.GetCustOrders;
 go
 create function dbo.GetCustOrders
@@ -373,11 +340,6 @@ FROM dbo.GetCustOrders(6) AS C
 	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
-
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
 
 drop function if exists dbo.GetCustOrders;
 go
@@ -400,11 +362,6 @@ FROM dbo.GetCustOrders(7) AS C
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
 
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
-
 drop function if exists dbo.GetCustOrders;
 go
 create function dbo.GetCustOrders
@@ -425,11 +382,6 @@ FROM dbo.GetCustOrders(8) AS C
 	LEFT OUTER JOIN Sales.OrderDetailsAudit AS ODA
 		ON O.orderid = ODA.orderid
 GROUP BY C.custid;
-
--- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
--- Tables involved: Customers and Order tables --
-
-use tsqlv4
 
 drop function if exists dbo.GetCustOrders;
 go
