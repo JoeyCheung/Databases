@@ -301,8 +301,6 @@ GROUP BY C.custid;
 -- Return customers and their orders including customers who placed no orders and with their order detail audit -- 
 -- Tables involved: Customers and Order tables --
 
-use tsqlv4
-
 drop function if exists dbo.GetCustOrders;
 go
 create function dbo.GetCustOrders
