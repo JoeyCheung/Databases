@@ -165,10 +165,10 @@ from Sales.OrderValues
 
 				custid	country	region	city		location
 					1	Germany	NULL	Berlin		Germany,Berlin
-					2	Mexico	NULL	México D.F.	Mexico,México D.F.
-					3	Mexico	NULL	México D.F.	Mexico,México D.F.
+					2	Mexico	NULL	MÃ©xico D.F.	Mexico,MÃ©xico D.F.
+					3	Mexico	NULL	MÃ©xico D.F.	Mexico,MÃ©xico D.F.
 					4	UK		NULL	London		UK,London
-					5	Sweden	NULL	Luleå		Sweden,Luleå
+					5	Sweden	NULL	LuleÃ¥		Sweden,LuleÃ¥
 					6	Germany	NULL	Mannheim	Germany,Mannheim
 					7	France	NULL	Strasbourg	France,Strasbourg
 					8	Spain	NULL	Madrid		Spain,Madrid
@@ -201,10 +201,10 @@ from Sales.Customers
 		Customer WFIZJ		Misiec, Anna			Brazil,SP,Sao Paulo
 		Customer YJCBX		Orint, Neil				Brazil,SP,Campinas
 		Customer IBVRG		Zhang, Frank			Brazil,RJ,Rio de Janeiro
-		Customer FRXZL		Óskarsson, Jón Harry	Ireland,Co. Cork,Cork
+		Customer FRXZL		Ã“skarsson, JÃ³n Harry	Ireland,Co. Cork,Cork
 		Customer CQRAA		Duerr, Bernard			Italy,Bergamo
 		Customer LHANT		Voss, Florian			Italy,Reggio Emilia
-		Customer WMFEA		Schmöllerl, Martin		Italy,Torino
+		Customer WMFEA		SchmÃ¶llerl, Martin		Italy,Torino
 
 */
 select top(9) companyname, contactname, concat(country, ',', city) as location
@@ -288,9 +288,9 @@ from Sales.orders as o, Sales.OrderDetails
 			Number of rows 12
 			companyname				contactname			TotalOrders	TotalAmountPurchased
 			Customer IRRVL			Veronesi, Giorgio		28			117483.39
-			Customer LCOUJ			Navarro, Tomás			31			115673.39
+			Customer LCOUJ			Navarro, TomÃ¡s			31			115673.39
 			Customer THHDP			Kane, John				30			113236.68
-			Customer FRXZL			Óskarsson, Jón Harry	19			57317.39
+			Customer FRXZL			Ã“skarsson, JÃ³n Harry	19			57317.39
 			Customer NYUHS			Moore, Michael			18			52245.90
 
 */
